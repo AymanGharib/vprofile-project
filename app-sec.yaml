@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret
+type: Opaque    
+data:
+   dbpas: dnByb2RicGFzcw==
+   rmpas: Z3Vlc3Q=
+ 
+

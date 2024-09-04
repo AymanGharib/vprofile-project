@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  vprodb:
+    build:
+          context:  ./Docker-files/db
+    image: ayman909/vprodb
+    container_name: vprodb
+    ports:
+      - "3306:3306"
+    environment: 
+      - MYSQL_ROOT_PASSWORD=vprodbpass
+    networks:
+      - vpro-network
+
+  vprocache:
+    image: memcached
+    container_name: vprocache
+    ports:
+      - "11211:11211"
+    networks:
+      - vpro-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: vpromq01
+    ports:
+      - "5672:5672"   # RabbitMQ service port
+      - "15672:15672" # RabbitMQ Management UI port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - vpro-network
+    
+  vproapp:
+    build: 
+              context: ./Docker-files/app
+    image: ayman909/vproapp
+    container_name: vproapp
+    ports:
+      - "8080:8080"
+    networks:
+      - vpro-network
+
+  vproweb:
+    build: 
+       context: ./Docker-files/web
+    image: ayman909/vproweb
+    container_name: vproweb
+    ports:
+      - "80:80"
+    networks:
+      - vpro-network
+
+networks:
+  vpro-network:
+    driver: bridge
